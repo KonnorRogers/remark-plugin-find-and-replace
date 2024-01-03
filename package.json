@@ -1,0 +1,49 @@
+{
+  "name": "remark-plugin-find-and-replace",
+  "version": "1.0.0",
+  "description": "A variety of simple components that match an aria-role",
+  "main": "./exports/index.js",
+  "module": "./exports/index.js",
+  "types": "./exports/index.d.ts",
+  "exports": {
+    ".": "./exports/index.js",
+    "./package.json": "./package.json",
+    "./exports/*.js": "./exports/*.js",
+    "./exports/*": "./exports/*",
+    "./types/*": "./types/*.d.ts"
+  },
+  "type": "module",
+  "files": [
+    "exports",
+    "internal",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rimraf -g \"./exports/**/*.d.ts\" \"./internal/**/*.d.ts\"",
+    "build": "npm run clean && tsc",
+    "deploy:patch": "npm run build && npm version patch && npm publish && git push --follow-tags",
+    "deploy:minor": "npm run build && npm version minor && npm publish && git push --follow-tags",
+    "deploy:major": "npm run build && npm version major && npm publish && git push --follow-tags"
+  },
+  "keywords": [
+    "web-components",
+    "aria"
+  ],
+  "license": "MIT",
+  "repository": "git@github.com:KonnorRogers/remark-plugin-find-and-replace.git",
+  "bugs": {
+    "url": "https://github.com/KonnorRogers/remark-plugin-find-and-replace/issues"
+  },
+  "homepage": "https://github.com/KonnorRogers/remark-plugin-find-and-replace",
+  "author": "KonnorRogers <konnor5456@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "remark-plugin-find-and-replace": "link:.",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}
