@@ -29,7 +29,7 @@ export default defineConfig({
           { pattern: '%VERSION%', replacement: "2.6.2" },
           // Replacement can be anything you pass as a "replacement" as noted here:
           // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#replacement
-          { pattern: '%CDNDIR%', replacement: (name, pattern) => return `pattern: ${pattern}` },
+          { pattern: 'find a match', replacement: (match) => return `match: ${match}` },
           // You can also pass in regex, just make sure to provide the "g" flag for global regex.
           { pattern: /LICENSE/g, replacement: "[MIT LICENSE](https://opensource.org/license/mit/)" }
         ]
