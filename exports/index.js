@@ -83,14 +83,14 @@ export function RemarkPluginFindAndReplace (options) {
     return {pattern: toRegExp(pattern), replacement}
   })
 
-  const processableNodes = ['text', 'html', 'code', 'inlineCode', 'link']
-
   /**
    * @param {ASTNode} node
    */
   function transformNode (node) {
     let processedText = ""
     if (node.type === 'link') {
+      if (!node.url) return
+
       // For links, the text value is replaced by text node, so we change the
       // URL value.
       processedText = node.url
@@ -98,8 +98,11 @@ export function RemarkPluginFindAndReplace (options) {
       replacements.forEach(({ pattern, replacement }) => processedText = processedText.replace(pattern, replacement))
       node.url = processedText
     } else {
+      if (!node.value) return
+
       // For all other nodes, replace the node value.
       processedText = node.value
+
       // @ts-expect-error
       replacements.forEach(({ pattern, replacement }) => processedText = processedText.replace(pattern, replacement))
       node.value = processedText
@@ -108,22 +111,23 @@ export function RemarkPluginFindAndReplace (options) {
 
   return function () {
     /**
-     * @param {ASTNode} tree
-     * @param {any} _file
+     * @param {ASTNode} node
      */
-    return function recurseTree(tree, _file) {
-      if (!tree) return
-      if (!tree.children) return
+    return function visit(node) {
+      if (!node) return
 
-      // Go through all text, html, code, inline code, and links.
-      tree.children.forEach((node) => {
-        if (!processableNodes.includes(node.type)) return
-        if (node.type === "link" && node.url) {
-          transformNode(node)
-        } else if (node.value) {
-          transformNode(node)
+      transformNode(node)
+
+      if (!node.children?.length) return
+
+      for (const childNode of node.children) {
+        transformNode(childNode)
+
+        if (childNode.children?.length) {
+          visit(childNode)
         }
-      })
+      }
     }
   }
 }
+
